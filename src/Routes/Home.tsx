@@ -1,13 +1,11 @@
 import styled from "styled-components";
 
 const Container = styled.div`
-    height: 200vh;
+  height: 300vh;
 `;
 
 function Home() {
-  return (
-    <Container>Home</Container>
-  )
+  return <Container>Home</Container>;
 }
 
-export default Home
+export default Home;
