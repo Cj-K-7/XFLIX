@@ -1,6 +1,8 @@
+import { Container } from "../components/Basic-components"
+
 function Search() {
   return (
-    <div>Search</div>
+    <Container>Search</Container>
   )
 }
 

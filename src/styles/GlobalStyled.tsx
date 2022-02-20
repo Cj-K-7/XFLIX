@@ -29,7 +29,11 @@ footer, header, hgroup, menu, nav, section {
 body {
 	line-height: 1;
 	background-color: ${props=>props.theme.bgColor.dark};
-	color: ${props=>props.theme.textColor.white}
+	color: ${props=>props.theme.textColor.white};
+	letter-spacing: 0.5px;
+&::-webkit-scrollbar {
+  display: none;
+}
 }
 ol, ul {
 	list-style: none;
@@ -48,6 +52,7 @@ table {
 }
 a {
 	&:link{
+		color:inherit;
 		text-decoration: none;
 	}
 	&:visited{

@@ -1,9 +1,9 @@
 import { Container } from "../components/Basic-components"
 
-function TV() {
+function Movie() {
   return (
-    <Container>TV</Container>
+    <Container>Movie</Container>
   )
 }
 
-export default TV
+export default Movie

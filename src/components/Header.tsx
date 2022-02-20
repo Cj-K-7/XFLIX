@@ -16,7 +16,7 @@ const HeaderBox = styled(motion.nav)`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  transition: 0.8s;
+  transition: 0.4s;
 `;
 
 const Column = styled.div`
@@ -81,14 +81,15 @@ const ISearch = styled(motion.svg)`
 `;
 const Circle = styled(motion.span)`
   position: absolute;
-  width: 10px;
-  height: 10px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   top: -10px;
   left: 0;
   right: 0;
   margin: 0 auto;
   background-color: ${(props) => props.theme.red};
+  box-shadow: 0px 0px 6px ${(props) => props.theme.red};
 `;
 
 const pathVar = {
@@ -106,6 +107,7 @@ function Header() {
   const [isSearching, setisSearching] = useState(false);
   const home = useMatch("/");
   const tv = useMatch("/tv");
+  const movie = useMatch("/movie");
   const inputAni = useAnimation();
   const toggleSearch = () => {
     if (isSearching) {
@@ -119,7 +121,7 @@ function Header() {
   const backgroundColor = useTransform(
     scrollY,
     [0, 300],
-    ["rgba(0,0,0,0)", "rgba(0,0,0,0.8)"]
+    ["rgba(18,18,18,0)", "rgba(18,18,18,0.88)"]
   );
 
   return (
@@ -142,7 +144,12 @@ function Header() {
             <Link to="/">HOME {home && <Circle layoutId="circle" />}</Link>
           </Category>
           <Category>
-            <Link to="/tv">TV {tv && <Circle layoutId="circle" />}</Link>
+            <Link to="/tv">TV Shows {tv && <Circle layoutId="circle" />}</Link>
+          </Category>
+          <Category>
+            <Link to="/movie">
+              Movies {movie && <Circle layoutId="circle" />}
+            </Link>
           </Category>
         </Menu>
       </Column>

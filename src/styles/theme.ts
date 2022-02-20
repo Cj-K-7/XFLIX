@@ -1,7 +1,7 @@
 import { DefaultTheme } from "styled-components";
 
 export const theme: DefaultTheme = {
-  red : "#E51013",
+  red: "#E51013",
   bgColor: {
     dark: "#121212",
     black: "#181818",
@@ -9,7 +9,7 @@ export const theme: DefaultTheme = {
   },
   textColor: {
     hover: "#FFFFFF",
-    white: "#A5A5A5",
-    highlight: "FF5050",
+    white: "#B0B0B0",
+    highlight: "#D3D3D3",
   },
 };
