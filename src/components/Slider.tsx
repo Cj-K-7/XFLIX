@@ -21,7 +21,6 @@ const SliderTrail = styled(motion.div)`
 `;
 
 const PosterCard = styled(motion.div)`
-  position: relative;
   margin: 0px 12px;
   width: fit-content;
   height: fit-content;
