@@ -9,7 +9,7 @@ export const theme: DefaultTheme = {
   },
   textColor: {
     hover: "#FFFFFF",
-    white: "#B0B0B0",
-    highlight: "#D3D3D3",
+    white: "#C8C8C8",
+    highlight: "#E3EED3",
   },
 };

@@ -8,10 +8,10 @@ import {
   Banner,
   Title,
   OverView,
+  Category,
 } from "../components/Basic-components";
 import Loader from "../components/Loader";
 import Slider from "../components/Slider";
-
 
 function Home() {
   const index = useRecoilValue(indexAtom);
@@ -24,24 +24,28 @@ function Home() {
     return num >= str.length ? str : str.substring(0, num) + " . . .";
   };
 
+  console.log("Home rendered");
   return (
-    <Container>
+    <>
       {isLoading ? (
         <Loader />
-      ) :  data? (
-        <>
-          <Main image={imageURL(data.results[index].backdrop_path || "")}>
-            <Banner>
-              <Title>{data?.results[index].title}</Title>
-              <OverView>
-                {truncating(data.results[index].overview as string, 240)}
-              </OverView>
-            </Banner>
-          </Main>
-          <Slider data={data.results}/>
-        </>
-      ) : <Loader/>}
-    </Container>
+        ) : data ? (
+        <Container>
+          <Main image={imageURL(data.results[index].backdrop_path || "")} />
+          <Banner>
+            <Title>{data?.results[index].title}</Title>
+            <OverView>
+              {truncating(data.results[index].overview as string, 240)}
+            </OverView>
+          </Banner>
+
+            <Category>Trend Now</Category>
+            <Slider data={data.results} />
+        </Container>
+      ) : (
+        <Loader />
+      )}
+    </>
   );
 }
 

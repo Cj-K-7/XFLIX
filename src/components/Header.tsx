@@ -17,6 +17,7 @@ const HeaderBox = styled(motion.nav)`
   justify-content: space-between;
   align-items: center;
   transition: 0.4s;
+  z-index: 10;
 `;
 
 const Column = styled.div`
@@ -103,7 +104,7 @@ const pathVar = {
 };
 
 function Header() {
-  console.log("rendered");
+  console.log("Header rendered");
   const [isSearching, setisSearching] = useState(false);
   const home = useMatch("/");
   const tv = useMatch("/tv");

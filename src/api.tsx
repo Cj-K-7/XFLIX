@@ -29,8 +29,8 @@ export interface IResult {
   total_results: number;
 }
 
-export const imageURL = (poster_path: IMedia["poster_path"], format?:string) =>
-  `https://image.tmdb.org/t/p/${format ? format : "original"}${poster_path}`;
+export const imageURL = (path: string, format?:string) =>
+  `https://image.tmdb.org/t/p/${format ? format : "original"}${path}`;
 
 export const fetchTrending = () => {
   return fetch(`${basicURL}trending/all/week?api_key=${APIKey}`).then((res) =>
