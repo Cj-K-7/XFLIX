@@ -1,0 +1,12 @@
+{
+  "files": {
+    "main.css": "/XFLIX/static/css/main.abae073e.css",
+    "main.js": "/XFLIX/static/js/main.6ba0bc12.js",
+    "index.html": "/XFLIX/index.html",
+    "main.6ba0bc12.js.map": "/XFLIX/static/js/main.6ba0bc12.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.abae073e.css",
+    "static/js/main.6ba0bc12.js"
+  ]
+}
