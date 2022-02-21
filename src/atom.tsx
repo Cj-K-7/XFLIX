@@ -1,6 +1,11 @@
-import { atom, selector } from "recoil";
+import { atom } from "recoil";
 
 export const indexAtom = atom({
-    key: "index",
+    key: "indexKey",
     default: 0,
 });
+
+export const isMovieAtom = atom({
+    key: 'mediaTypeKey',
+    default: false
+})

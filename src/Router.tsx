@@ -10,10 +10,10 @@ function Router() {
     <BrowserRouter>
       <Header />
       <Routes>
-        <Route path="/movie" element={<Movie />} />
-        <Route path="/tv" element={<TV />} />
-        <Route path="/search" element={<Search />} />
-        <Route path="/" element={<Home />} />
+        <Route path="/movie/*" element={<Movie />} />
+        <Route path="/tv/*" element={<TV />} />
+        <Route path="/search/*" element={<Search />} />
+        <Route path={"/*"} element={<Home />} />
       </Routes>
     </BrowserRouter>
   );

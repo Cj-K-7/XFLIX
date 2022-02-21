@@ -30,11 +30,13 @@ const Logo = styled(motion.svg)`
 `;
 
 const Menu = styled.ul`
+  min-width: 300px;
   display: flex;
   align-items: center;
 `;
 const Category = styled.li`
-  font-size: 18px;
+  text-align: center;
+  font-size: 20px;
   font-weight: 500;
   margin-right: 20px;
   color: ${(props) => props.theme.textColor.white};
@@ -82,15 +84,27 @@ const ISearch = styled(motion.svg)`
 `;
 const Circle = styled(motion.span)`
   position: absolute;
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
-  top: -10px;
+  top: -12px;
   left: 0;
   right: 0;
   margin: 0 auto;
   background-color: ${(props) => props.theme.red};
-  box-shadow: 0px 0px 6px ${(props) => props.theme.red};
+  box-shadow: 0px 0px 4px 2.5px ${(props) => props.theme.red};
+  animation: glow 2s 0.8s infinite linear alternate;
+  @keyframes glow {
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.1;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
 `;
 
 const pathVar = {
@@ -104,11 +118,10 @@ const pathVar = {
 };
 
 function Header() {
-  console.log("Header rendered");
   const [isSearching, setisSearching] = useState(false);
-  const home = useMatch("/");
-  const tv = useMatch("/tv");
-  const movie = useMatch("/movie");
+  const home = useMatch("/*");
+  const tv = useMatch("/tv/*");
+  const movie = useMatch("/movie/*");
   const inputAni = useAnimation();
   const toggleSearch = () => {
     if (isSearching) {
