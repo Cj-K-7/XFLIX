@@ -5,7 +5,8 @@ import {
   useViewportScroll,
 } from "framer-motion";
 import { useState } from "react";
-import { Link, useMatch } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { Link, useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const HeaderBox = styled(motion.nav)`
@@ -51,7 +52,7 @@ const Category = styled.li`
   }
 `;
 
-const Search = styled.span`
+const Search = styled.form`
   display: flex;
   align-items: center;
   position: relative;
@@ -62,7 +63,7 @@ const Input = styled(motion.input)`
   position: absolute;
   width: 200px;
   right: 0px;
-  padding: 5px;
+  padding: 8px;
   font-size: 16px;
   background-color: transparent;
   color: ${(p) => p.theme.textColor.white};
@@ -117,8 +118,17 @@ const pathVar = {
   },
 };
 
+interface IForm {
+  keyword : string
+}
+
 function Header() {
   const [isSearching, setisSearching] = useState(false);
+  const navigate = useNavigate();
+  const { register, handleSubmit } =useForm<IForm>();
+  const onSubmit = ({keyword} : IForm) =>{
+    navigate(`/search?keyword=${keyword}`);
+  }
   const home = useMatch("/*");
   const tv = useMatch("/tv/*");
   const movie = useMatch("/movie/*");
@@ -168,17 +178,17 @@ function Header() {
         </Menu>
       </Column>
       <Column>
-        <Search>
+        <Search onSubmit={handleSubmit(onSubmit)}>
           <ISearch
             onClick={() => toggleSearch()}
-            animate={{ x: isSearching ? -220 : 0 }}
-            transition={{ type: "linear", duration: 0.3 }}
+            animate={{ x: isSearching ? -220 : 0 , transition : { type: "tween", duration : 0.6 }}}
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 512 512"
           >
             <path d="M500.3 443.7l-119.7-119.7c27.22-40.41 40.65-90.9 33.46-144.7C401.8 87.79 326.8 13.32 235.2 1.723C99.01-15.51-15.51 99.01 1.724 235.2c11.6 91.64 86.08 166.7 177.6 178.9c53.8 7.189 104.3-6.236 144.7-33.46l119.7 119.7c15.62 15.62 40.95 15.62 56.57 0C515.9 484.7 515.9 459.3 500.3 443.7zM79.1 208c0-70.58 57.42-128 128-128s128 57.42 128 128c0 70.58-57.42 128-128 128S79.1 278.6 79.1 208z" />
           </ISearch>
           <Input
+            {...register("keyword", {required : true})}
             initial={{ scaleX: 0 }}
             animate={inputAni}
             transition={{ type: "linear", duration: 0.6 }}

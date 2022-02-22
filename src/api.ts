@@ -1,6 +1,13 @@
 const APIKey = "34161cf6d910bb2a80ad0681aa12722e";
 const basicURL = "https://api.themoviedb.org/3/";
 
+export interface IResult {
+  page: number;
+  results: IMedia[];
+  total_page: number;
+  total_results: number;
+}
+
 export interface IMedia {
   adult: boolean;
   backdrop_path: string;
@@ -20,23 +27,7 @@ export interface IMedia {
   media_type: string;
 }
 
-export interface IResult {
-  page: number;
-  results: IMedia[];
-  total_page: number;
-  total_results: number;
-}
-
-export const imageURL = (path: string, format?: string) =>
-  `https://image.tmdb.org/t/p/${format ? format : "original"}${path}`;
-
-export const fetchTrending = () => {
-  return fetch(`${basicURL}trending/all/week?api_key=${APIKey}`).then((res) =>
-    res.json()
-  );
-};
-
-export interface IMovieDetail {
+export interface IMediaDetail {
   adult: boolean;
   backdrop_path: string;
   belongs_to_collection: object;
@@ -65,9 +56,31 @@ export interface IMovieDetail {
   vote_coun: number;
 }
 
+export const imageURL = (path: string, format?: string) =>
+  `https://image.tmdb.org/t/p/${format ? format : "original"}${path}`;
+
+export const fetchTrending = () => {
+  return fetch(`${basicURL}trending/all/week?api_key=${APIKey}`).then((res) =>
+    res.json()
+  );
+};
+
+export const fetchPopMovie = () => {
+  return fetch(`${basicURL}movie/popular?api_key=${APIKey}`).then((res) =>
+    res.json()
+  );
+};
+
+export const fetchSearching =({queryKey}:any)=>{
+  const [, query] = queryKey;
+  return fetch(`${basicURL}search/multi?api_key=${APIKey}&query=${query}`).then((res) =>
+  res.json()
+);
+}
+
 export const fetchMovieDetail = ({queryKey}:any) => {
-  const [, query , mediaType] = queryKey;
-  return fetch(`${basicURL}${mediaType ? "movie" : "tv"}/${query}?api_key=${APIKey}`).then((res) =>
+  const [, query , mediaType="movie"] = queryKey;
+  return fetch(`${basicURL}${mediaType}/${query}?api_key=${APIKey}`).then((res) =>
     res.json()
   );
 };

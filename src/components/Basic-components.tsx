@@ -7,6 +7,7 @@ export const Container = styled.div`
   overflow-x: hidden;
   &::after {
     content: "";
+    pointer-events: none;
     position: fixed;
     top: 0;
     right: 0;
@@ -39,6 +40,11 @@ export const Main = styled(motion.div)<{ image: string }>`
     ),
     url(${(props) => props.image});
   background-size: cover;
+  animation: fadeIn 1s ease-in-out;
+  @keyframes fadeIn {
+  0% { opacity : 0 }
+  100% { opacity : 1 }
+}
 `;
 
 export const Banner = styled(motion.div)`
@@ -112,13 +118,14 @@ export const Row = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  background-color: rgba(0,0,0,0.8);
+  background-color: rgba(0,0,0, 1);
   div{
     padding: 20px;
     width: 400px;
   }
   h1 {
     font-size: 32px;
+    font-weight: bolder;
     margin-bottom: 16px;
   }
   h2 {

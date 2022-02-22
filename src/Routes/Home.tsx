@@ -4,16 +4,17 @@ import {
   useViewportScroll,
 } from "framer-motion";
 import { useQuery } from "react-query";
-import { useMatch, useNavigate } from "react-router-dom";
+import { useMatch } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import {
   fetchMovieDetail,
+  fetchPopMovie,
   fetchTrending,
   imageURL,
-  IMovieDetail,
+  IMediaDetail,
   IResult,
 } from "../api";
-import { indexAtom, isMovieAtom } from "../atom";
+import { mediaAtom, mediaTypeAtom } from "../atom";
 import {
   Container,
   Main,
@@ -22,29 +23,28 @@ import {
   OverView,
   Category,
   Sliders,
-  Selcted,
-  Overlay,
-  Row,
-  Img,
 } from "../components/Basic-components";
+import Detail from "../components/Detail";
 import Loader from "../components/Loader";
 import Slider from "../components/Slider";
 
 function Home() {
-  const index = useRecoilValue(indexAtom);
-  const mediaType = useRecoilValue(isMovieAtom);
+  const media = useRecoilValue(mediaAtom);
   const selectedMatch = useMatch("/:mediaID");
-  const navigate = useNavigate();
   const queryKey = selectedMatch?.params.mediaID;
+  //query
   const { isLoading: isLoadingTreding, data: tredingData } = useQuery<IResult>(
     ["media", "trending"],
     fetchTrending
   );
-  const { isLoading: isLoadingMovie, data: movieData } = useQuery<IMovieDetail>(
-    ["media", queryKey, mediaType],
-    fetchMovieDetail
+  const { isLoading: isLoadingPop, data: popularData } = useQuery<IResult>(
+    ["media", "popular"],
+    fetchPopMovie
   );
-  const isLoading: boolean = isLoadingTreding && isLoadingMovie;
+  const { isLoading: isLoadingMedia, data: MediaDetailData } =
+    useQuery<IMediaDetail>(["media", queryKey, media.media_type], fetchMovieDetail);
+  const isLoading: boolean = isLoadingTreding && isLoadingMedia && isLoadingPop;
+  //animation-motion
   const { scrollYProgress } = useViewportScroll();
   const bannerOpacity = useTransform(scrollYProgress, [0.1, 0.16], [1, 0]);
   const mainOpacity = useTransform(scrollYProgress, [0, 0.4], [1, 0.1]);
@@ -57,50 +57,37 @@ function Home() {
     <>
       {isLoading ? (
         <Loader />
-      ) : tredingData ? (
+      ) : tredingData && popularData ? (
         <Container>
           <Main
+            key={tredingData.results[0].backdrop_path}
             style={{ opacity: mainOpacity }}
-            image={imageURL(tredingData.results[index].backdrop_path || "")}
+            image={imageURL(tredingData.results[0].backdrop_path || "")}
           />
           <Banner style={{ opacity: bannerOpacity }}>
             <Title>
-              {tredingData?.results[index].title ||
-                tredingData?.results[index].original_name}
+              {tredingData?.results[0].title ||
+                tredingData?.results[0].original_name}
             </Title>
             <OverView>
-              {truncating(tredingData.results[index].overview as string, 240)}
+              {truncating(tredingData.results[0].overview as string, 240)}
             </OverView>
           </Banner>
           <Sliders>
             <Category>Trend Now</Category>
-            <Slider data={tredingData.results} />
+            <Slider data={tredingData.results} path={""} />
+          </Sliders>
+          <Sliders>
+            <Category>Popular Movies</Category>
+            <Slider data={popularData.results} path={""} />
           </Sliders>
           <AnimatePresence>
-            {selectedMatch ? (
-              <>
-                <Overlay
-                  initial={{ opacity: 0 }}
-                  exit={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.6 }}
-                  onClick={() => navigate("/")}
-                />
-                <Selcted layoutId={selectedMatch.params.mediaID}>
-                  {movieData ? (
-                    <Row>
-                      <Img
-                        image={imageURL(movieData?.poster_path || "", "w500")}
-                      />
-                      <div>
-                        <h1>{movieData?.original_title || movieData.original_name}</h1>
-                        <h2>⭐ {movieData?.vote_average}</h2>
-                        <span>{movieData?.overview}</span>
-                      </div>
-                    </Row>
-                  ) : <Loader/>}
-                </Selcted>
-              </>
+            {selectedMatch && MediaDetailData ? (
+              <Detail
+                exitTo={"/"}
+                layoutId={selectedMatch.params.mediaID+""}
+                data={MediaDetailData}
+              />
             ) : null}
           </AnimatePresence>
         </Container>
