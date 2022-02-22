@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/XFLIX/static/css/main.53fe4771.css",
-    "main.js": "/XFLIX/static/js/main.55d0ced4.js",
+    "main.js": "/XFLIX/static/js/main.78868644.js",
     "index.html": "/XFLIX/index.html",
     "main.53fe4771.css.map": "/XFLIX/static/css/main.53fe4771.css.map",
-    "main.55d0ced4.js.map": "/XFLIX/static/js/main.55d0ced4.js.map"
+    "main.78868644.js.map": "/XFLIX/static/js/main.78868644.js.map"
   },
   "entrypoints": [
     "static/css/main.53fe4771.css",
-    "static/js/main.55d0ced4.js"
+    "static/js/main.78868644.js"
   ]
 }
