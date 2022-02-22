@@ -3,9 +3,10 @@ import {
   useTransform,
   useViewportScroll,
 } from "framer-motion";
+import { useEffect } from "react";
 import { useQuery } from "react-query";
 import { useMatch } from "react-router-dom";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import {
   fetchMovieDetail,
   fetchPopMovie,
@@ -30,7 +31,7 @@ import Slider from "../components/Slider";
 
 function Home() {
   //State
-  const media = useRecoilValue(mediaAtom);
+  const [media, setMedia] = useRecoilState(mediaAtom);
   const category = useRecoilValue(categoryAtom);
 
   //routers
@@ -70,25 +71,22 @@ function Home() {
       ) : tredingData && popularData ? (
         <Container>
           <Main
-            key={(media || tredingData.results[0]).backdrop_path}
+            key={media.backdrop_path}
             style={{ opacity: mainOpacity }}
             image={imageURL(
-              (media || tredingData.results[0]).backdrop_path || ""
+              media.backdrop_path || tredingData.results[0].backdrop_path || ""
             )}
           />
           <Banner style={{ opacity: bannerOpacity }}>
             <Title>
-              {media
-                ? media.original_title || media.original_name
-                : tredingData?.results[0].original_title ||
-                  tredingData?.results[0].original_name}
+              {
+                media.original_title ||
+                media.original_name ||
+                tredingData.results[0].original_title ||
+                tredingData.results[0].original_name
+                }
             </Title>
-            <OverView>
-              {truncating(
-                (media || tredingData.results[0]).overview as string,
-                240
-              )}
-            </OverView>
+            <OverView>{truncating(media.overview || tredingData.results[0].overview, 240)}</OverView>
           </Banner>
           <Sliders>
             <Category>Trend Now</Category>
