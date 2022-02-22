@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { imageURL, IMedia } from "../api";
-import { mediaAtom, mediaTypeAtom } from "../atom";
+import { categoryAtom, mediaAtom } from "../atom";
 
 const Rail = styled.div`
   width: 100vw;
@@ -89,6 +89,7 @@ const Info = styled(motion.div)`
   }
 `;
 
+//motion variants
 const posterVar = {
   init: { scale: 1, y: 0 },
   selected: { scale: 1.25, y: "-150px", transition: { delay: 0.4 } },
@@ -101,15 +102,23 @@ const infoVar = {
 };
 
 interface ISliderProps {
+  category : string,
   data: IMedia[];
   path : string;
 }
 
-function Slider({ data, path }: ISliderProps) {
+function Slider({ category, data, path }: ISliderProps) {
+  //motion ref
   const dragRef = useRef<HTMLDivElement>(null);
+
+  //state
   const setMedia = useSetRecoilState(mediaAtom);
+  const setCategory = useSetRecoilState(categoryAtom);
+
+  //utill
   const navigate = useNavigate();
   const onCardClick = (media: IMedia) => {
+    setCategory(category);
     setMedia(media);
     if(path === ""){
       navigate(`/${media.id}`)
@@ -117,13 +126,14 @@ function Slider({ data, path }: ISliderProps) {
       navigate(`${path}&detail=${media.id}`);
     }
   };
+
   return (
     <Rail ref={dragRef}>
       <SliderTrail drag="x" dragConstraints={dragRef}>
         {data.map((media) => (
           <PosterCard
             key={media.id + ""}
-            layoutId={media.id + ""}
+            layoutId={category+media.id}
             variants={posterVar}
             initial="init"
             whileHover="selected"

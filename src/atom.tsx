@@ -27,3 +27,8 @@ export const mediaTypeAtom = atom({
     key: 'mediaTypeKey',
     default: "movie"
 })
+
+export const categoryAtom = atom({
+    key: `categoryKey`,
+    default: ""
+})

@@ -31,18 +31,25 @@ const NoResult = styled.div`
   align-items: center;
   justify-content: center;
 `;
+
 function Search() {
+  //state
   const mediaType = useRecoilValue(mediaTypeAtom);
+
+  //routers
   const location = useLocation();
   const keyword = new URLSearchParams(location.search).get("keyword");
   const detail = new URLSearchParams(location.search).get("detail");
   const path = `/search?keyword=${keyword}`
+
+  //query
   const { isLoading: isLoadingSearch, data: searchData } = useQuery<IResult>(
     ["search", keyword],
     fetchSearching
   );
   const { isLoading: isLoadingMedia, data: MediaDetailData } =
     useQuery<IMediaDetail>(["media", detail, mediaType], fetchMovieDetail);
+
   const isLoading: boolean = isLoadingSearch && isLoadingMedia;
 
   return (
@@ -59,6 +66,7 @@ function Search() {
             <SearchedContents>
               <Category>Searched Results</Category>
               <Slider
+                category="Searched"
                 data={searchData.results}
                 path={path}
               />

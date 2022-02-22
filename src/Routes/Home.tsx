@@ -14,7 +14,7 @@ import {
   IMediaDetail,
   IResult,
 } from "../api";
-import { mediaAtom, mediaTypeAtom } from "../atom";
+import { categoryAtom, mediaAtom } from "../atom";
 import {
   Container,
   Main,
@@ -29,9 +29,14 @@ import Loader from "../components/Loader";
 import Slider from "../components/Slider";
 
 function Home() {
+  //State
   const media = useRecoilValue(mediaAtom);
+  const category = useRecoilValue(categoryAtom);
+
+  //routers
   const selectedMatch = useMatch("/:mediaID");
   const queryKey = selectedMatch?.params.mediaID;
+
   //query
   const { isLoading: isLoadingTreding, data: tredingData } = useQuery<IResult>(
     ["media", "trending"],
@@ -42,13 +47,18 @@ function Home() {
     fetchPopMovie
   );
   const { isLoading: isLoadingMedia, data: MediaDetailData } =
-    useQuery<IMediaDetail>(["media", queryKey, media.media_type], fetchMovieDetail);
+    useQuery<IMediaDetail>(
+      ["media", queryKey, media.media_type],
+      fetchMovieDetail
+    );
   const isLoading: boolean = isLoadingTreding && isLoadingMedia && isLoadingPop;
+
   //animation-motion
   const { scrollYProgress } = useViewportScroll();
   const bannerOpacity = useTransform(scrollYProgress, [0.1, 0.16], [1, 0]);
   const mainOpacity = useTransform(scrollYProgress, [0, 0.4], [1, 0.1]);
 
+  //utill
   const truncating = (str: string, num: number) => {
     return num >= str.length ? str : str.substring(0, num) + " . . .";
   };
@@ -60,32 +70,39 @@ function Home() {
       ) : tredingData && popularData ? (
         <Container>
           <Main
-            key={tredingData.results[0].backdrop_path}
+            key={(media || tredingData.results[0]).backdrop_path}
             style={{ opacity: mainOpacity }}
-            image={imageURL(tredingData.results[0].backdrop_path || "")}
+            image={imageURL(
+              (media || tredingData.results[0]).backdrop_path || ""
+            )}
           />
           <Banner style={{ opacity: bannerOpacity }}>
             <Title>
-              {tredingData?.results[0].title ||
-                tredingData?.results[0].original_name}
+              {media
+                ? media.original_title || media.original_name
+                : tredingData?.results[0].original_title ||
+                  tredingData?.results[0].original_name}
             </Title>
             <OverView>
-              {truncating(tredingData.results[0].overview as string, 240)}
+              {truncating(
+                (media || tredingData.results[0]).overview as string,
+                240
+              )}
             </OverView>
           </Banner>
           <Sliders>
             <Category>Trend Now</Category>
-            <Slider data={tredingData.results} path={""} />
+            <Slider category="trend" data={tredingData.results} path={""} />
           </Sliders>
           <Sliders>
             <Category>Popular Movies</Category>
-            <Slider data={popularData.results} path={""} />
+            <Slider category="pop" data={popularData.results} path={""} />
           </Sliders>
           <AnimatePresence>
             {selectedMatch && MediaDetailData ? (
               <Detail
                 exitTo={"/"}
-                layoutId={selectedMatch.params.mediaID+""}
+                layoutId={category + selectedMatch.params.mediaID}
                 data={MediaDetailData}
               />
             ) : null}
