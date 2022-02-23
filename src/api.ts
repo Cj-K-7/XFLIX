@@ -1,4 +1,8 @@
-const APIKey = "34161cf6d910bb2a80ad0681aa12722e";
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+const APIKey = process.env.REACT_APP_MOVIEAPI_KEY;
 const basicURL = "https://api.themoviedb.org/3/";
 
 export interface IResult {
