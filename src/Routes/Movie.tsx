@@ -10,6 +10,7 @@ import { Banner, Category, Container, Main, OverView, Title } from "../component
 import Detail from "../components/Detail";
 import Loader from "../components/Loader";
 import Slider from "../components/Slider";
+import { truncating } from "./Home";
 
 const MovieContents = styled.div`
   width: 100vw;
@@ -56,9 +57,9 @@ function Movie() {
             )}
           />
           <MovieContents>
-            <Banner style={{opacity, marginTop : -240, marginBottom: -240}}>
+            <Banner style={{opacity, marginTop : -180, marginBottom: -250}}>
               <Title>{media.title || media.name}</Title>
-              <OverView>{media.overview}</OverView>
+              <OverView>{truncating(media.overview, 220)}</OverView>
             </Banner>
             <Category>UPCOMING</Category>
             <Slider

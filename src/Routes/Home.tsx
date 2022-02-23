@@ -22,6 +22,10 @@ import Detail from "../components/Detail";
 import Loader from "../components/Loader";
 import Slider from "../components/Slider";
 
+export const truncating = (str: string, num: number) => {
+  return num >= str.length ? str : str.substring(0, num) + " . . .";
+};
+
 function Home() {
   //State
   const [media, setMedia] = useRecoilState(mediaAtom);
@@ -52,9 +56,6 @@ function Home() {
   );
 
   //utill
-  const truncating = (str: string, num: number) => {
-    return num >= str.length ? str : str.substring(0, num) + " . . .";
-  };
   const homePage = "";
 
   useEffect(() => {
@@ -79,7 +80,7 @@ function Home() {
             <OverView>{truncating(media.overview, 240)}</OverView>
           </Banner>
           <Sliders>
-            <Category>Trend Now</Category>
+            <Category>TREND NOW</Category>
             <Slider
               category="trend"
               data={tredingData.results}
@@ -87,7 +88,7 @@ function Home() {
             />
           </Sliders>
           <Sliders>
-            <Category>Popular Movies</Category>
+            <Category>POPURAR MOVIES</Category>
             <Slider
               category="pop"
               data={popularData.results}
