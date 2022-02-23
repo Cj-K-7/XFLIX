@@ -8,7 +8,7 @@ import TV from "./Routes/TV";
 function Router() {
   return (
     <BrowserRouter
-    basename={process.env.PUBLIC_URL}
+    //basename={process.env.PUBLIC_URL}
     >
       <Header />
       <Routes>
