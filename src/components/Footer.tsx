@@ -9,7 +9,7 @@ const Container = styled.div`
 `;
 
 function Footer() {
-  return <Container> here will be footer</Container>;
+  return <Container> Footer for testing motion - ScollYProgress</Container>;
 }
 
 export default Footer;

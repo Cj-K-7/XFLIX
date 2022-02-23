@@ -15,6 +15,7 @@ export const mediaAtom = atom<IMedia>({
         poster_path: "",
         release_date: "",
         title: "",
+        name: "",
         video: false,
         vote_average: 0,
         vote_count: 0,

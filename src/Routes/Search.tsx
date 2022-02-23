@@ -4,12 +4,10 @@ import { useLocation } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import {
-  fetchMovieDetail,
   fetchSearching,
-  IMediaDetail,
   IResult,
 } from "../api";
-import { mediaTypeAtom } from "../atom";
+import { mediaAtom } from "../atom";
 import {
   Category,
   Container,
@@ -34,7 +32,7 @@ const NoResult = styled.div`
 
 function Search() {
   //state
-  const mediaType = useRecoilValue(mediaTypeAtom);
+  const media = useRecoilValue(mediaAtom);
 
   //routers
   const location = useLocation();
@@ -43,21 +41,18 @@ function Search() {
   const path = `/search?keyword=${keyword}`
 
   //query
-  const { isLoading: isLoadingSearch, data: searchData } = useQuery<IResult>(
+  const { isLoading, data } = useQuery<IResult>(
     ["search", keyword],
     fetchSearching
   );
-  const { isLoading: isLoadingMedia, data: MediaDetailData } =
-    useQuery<IMediaDetail>(["media", detail, mediaType], fetchMovieDetail);
 
-  const isLoading: boolean = isLoadingSearch && isLoadingMedia;
 
   return (
     <>
       {isLoading ? (
         <Loader />
-      ) : searchData ? (
-        searchData.results.length === 0 ? (
+      ) : data ? (
+        data.results.length === 0 ? (
           <NoResult>
             <h1 style={{ fontSize: 32, letterSpacing: 2 }}>Sorry, no Result</h1>
           </NoResult>
@@ -67,12 +62,12 @@ function Search() {
               <Category>Searched Results</Category>
               <Slider
                 category="Searched"
-                data={searchData.results}
-                path={path}
+                data={data.results}
+                through={path}
               />
               <AnimatePresence>
-                {detail && MediaDetailData ? (
-                  <Detail exitTo={path} layoutId={detail} data={MediaDetailData} />
+                {detail ? (
+                  <Detail exitTo={path} layoutId={detail} media={media} mediatype={media.media_type} />
                 ) : null}
               </AnimatePresence>
             </SearchedContents>

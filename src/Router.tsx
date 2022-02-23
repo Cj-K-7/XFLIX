@@ -7,7 +7,9 @@ import TV from "./Routes/TV";
 
 function Router() {
   return (
-    <BrowserRouter basename={process.env.PUBLIC_URL}>
+    <BrowserRouter
+    // basename={process.env.PUBLIC_URL}
+    >
       <Header />
       <Routes>
         <Route path="/movie/*" element={<Movie />} />

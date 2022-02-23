@@ -29,10 +29,16 @@ const PosterCard = styled(motion.div)`
   cursor: pointer;
 `;
 
-const Img = styled.div<{ img_url: string }>`
+const CardImg = styled.div<{ img_url? : string}>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 300px;
   height: 200px;
-  background-image: url(${(props) => props.img_url});
+  ${props=> props.img_url ?
+    `background-image: url(${props.img_url});` 
+    : `background-color: ${props.theme.bgColor.dark};`
+    }
   background-size: cover;
   background-repeat: no-repeat;
 `;
@@ -92,7 +98,7 @@ const Info = styled(motion.div)`
 //motion variants
 const posterVar = {
   init: { scale: 1, y: 0 },
-  selected: { scale: 1.25, y: "-150px", transition: { delay: 0.4 } },
+  selected: { scale: 1.25, y: "-150px" },
   exit: { scale: 1, y: 0 },
 };
 const infoVar = {
@@ -104,10 +110,10 @@ const infoVar = {
 interface ISliderProps {
   category : string,
   data: IMedia[];
-  path : string;
+  through : string;
 }
 
-function Slider({ category, data, path }: ISliderProps) {
+function Slider({ category, data, through }: ISliderProps) {
   //motion ref
   const dragRef = useRef<HTMLDivElement>(null);
 
@@ -120,10 +126,10 @@ function Slider({ category, data, path }: ISliderProps) {
   const onCardClick = (media: IMedia) => {
     setCategory(category);
     setMedia(media);
-    if(path === ""){
-      navigate(`/${media.id}`)
+    if(through === `${through}&detail=${media.id}`){
+      navigate(`${through}&detail=${media.id}`);
     } else {
-      navigate(`${path}&detail=${media.id}`);
+      navigate(`${through}/${media.id}`)
     }
   };
 
@@ -138,17 +144,18 @@ function Slider({ category, data, path }: ISliderProps) {
             initial="init"
             whileHover="selected"
             exit="exit"
+            transition={{duration : 0.3 , delay: 0.4 }}
             onMouseEnter={() => setMedia(media)}
           >
-            <Img img_url={imageURL(media.backdrop_path, "w500")} />
+            {media.backdrop_path || media.poster_path ? <CardImg img_url={imageURL(media.backdrop_path || media.poster_path , "w500")} /> : <CardImg>No Image</CardImg>}
             <Info variants={infoVar}>
-              <h1>{media.original_title || media.original_name}</h1>
+              <h1>{media.title || media.name}</h1>
               <span>
                 <svg
                   onClick={() =>
                     window.open(
                       `https://www.youtube.com/results?search_query=${
-                        media.original_title || media.original_name
+                        media.title || media.name
                       }`,
                       "_blank"
                     )

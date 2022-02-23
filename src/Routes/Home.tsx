@@ -7,14 +7,7 @@ import { useEffect } from "react";
 import { useQuery } from "react-query";
 import { useMatch } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
-import {
-  fetchMovieDetail,
-  fetchPopMovie,
-  fetchTrending,
-  imageURL,
-  IMediaDetail,
-  IResult,
-} from "../api";
+import { movieFetches, fetchTrending, imageURL, IResult } from "../api";
 import { categoryAtom, mediaAtom } from "../atom";
 import {
   Container,
@@ -36,7 +29,6 @@ function Home() {
 
   //routers
   const selectedMatch = useMatch("/:mediaID");
-  const queryKey = selectedMatch?.params.mediaID;
 
   //query
   const { isLoading: isLoadingTreding, data: tredingData } = useQuery<IResult>(
@@ -44,25 +36,32 @@ function Home() {
     fetchTrending
   );
   const { isLoading: isLoadingPop, data: popularData } = useQuery<IResult>(
-    ["media", "popular"],
-    fetchPopMovie
+    ["movie", "popular"],
+    movieFetches.fetchPopMovie
   );
-  const { isLoading: isLoadingMedia, data: MediaDetailData } =
-    useQuery<IMediaDetail>(
-      ["media", queryKey, media.media_type],
-      fetchMovieDetail
-    );
-  const isLoading: boolean = isLoadingTreding && isLoadingMedia && isLoadingPop;
+
+  const isLoading: boolean = isLoadingTreding && isLoadingPop;
 
   //animation-motion
   const { scrollYProgress } = useViewportScroll();
-  const bannerOpacity = useTransform(scrollYProgress, [0.1, 0.16], [1, 0]);
-  const mainOpacity = useTransform(scrollYProgress, [0, 0.4], [1, 0.1]);
+  const opacity = useTransform(scrollYProgress, [0.1, 0.16], [1, 0]);
+  const filter = useTransform(
+    scrollYProgress,
+    [0, 0.7],
+    ["opacity(100%)", "opacity(12%)"]
+  );
 
   //utill
   const truncating = (str: string, num: number) => {
     return num >= str.length ? str : str.substring(0, num) + " . . .";
   };
+  const homePage = "";
+
+  useEffect(() => {
+    if (!isLoadingTreding && tredingData) {
+      setMedia(tredingData.results[0]);
+    }
+  }, [isLoadingTreding, tredingData, setMedia]);
 
   return (
     <>
@@ -72,36 +71,36 @@ function Home() {
         <Container>
           <Main
             key={media.backdrop_path}
-            style={{ opacity: mainOpacity }}
-            image={imageURL(
-              media.backdrop_path || tredingData.results[0].backdrop_path || ""
-            )}
+            style={{ filter }}
+            image={imageURL(media.backdrop_path)}
           />
-          <Banner style={{ opacity: bannerOpacity }}>
-            <Title>
-              {
-                media.original_title ||
-                media.original_name ||
-                tredingData.results[0].original_title ||
-                tredingData.results[0].original_name
-                }
-            </Title>
-            <OverView>{truncating(media.overview || tredingData.results[0].overview, 240)}</OverView>
+          <Banner style={{ opacity }}>
+            <Title>{media.title || media.name}</Title>
+            <OverView>{truncating(media.overview, 240)}</OverView>
           </Banner>
           <Sliders>
             <Category>Trend Now</Category>
-            <Slider category="trend" data={tredingData.results} path={""} />
+            <Slider
+              category="trend"
+              data={tredingData.results}
+              through={homePage}
+            />
           </Sliders>
           <Sliders>
             <Category>Popular Movies</Category>
-            <Slider category="pop" data={popularData.results} path={""} />
+            <Slider
+              category="pop"
+              data={popularData.results}
+              through={homePage}
+            />
           </Sliders>
           <AnimatePresence>
-            {selectedMatch && MediaDetailData ? (
+            {selectedMatch ? (
               <Detail
-                exitTo={"/"}
+                exitTo={homePage}
                 layoutId={category + selectedMatch.params.mediaID}
-                data={MediaDetailData}
+                media={media}
+                mediatype={media.media_type}
               />
             ) : null}
           </AnimatePresence>

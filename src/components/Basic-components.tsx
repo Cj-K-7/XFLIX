@@ -29,18 +29,20 @@ export const Main = styled(motion.div)<{ image: string }>`
   z-index: -1;
   background-image: radial-gradient(
       rgba(18, 18, 18, 0),
-      rgba(18, 18, 18, 0.3),
+      rgba(18, 18, 18, 0.1),
+      rgba(18, 18, 18, 0.2),
+      rgba(18, 18, 18, 0.7),
       rgba(18, 18, 18, 0.8)
     ),
     linear-gradient(
       to bottom,
       rgba(18, 18, 18, 0) 55%,
-      rgba(18, 18, 18, 0.45) 75%,
+      rgba(18, 18, 18, 0.3) 75%,
       rgba(18, 18, 18, 1)
     ),
     url(${(props) => props.image});
   background-size: cover;
-  animation: fadeIn 1s ease-in-out;
+  animation: fadeIn 1.6s ease-in-out;
   @keyframes fadeIn {
   0% { opacity : 0 }
   100% { opacity : 1 }
@@ -55,13 +57,6 @@ export const Banner = styled(motion.div)`
   width: 40%;
   height: 100vh;
   transition: 0.6s;
-  text-shadow: 0px 0px 4px rgba(18, 18, 18, 0.6);
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none; /* Safari */
-  -khtml-user-select: none; /* Konqueror HTML */
-  -moz-user-select: none; /* Old versions of Firefox */
-  -ms-user-select: none; /* Internet Explorer/Edge */
-  user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
 `;
 export const Title = styled.div`
   margin-bottom: 20px;
@@ -70,12 +65,13 @@ export const Title = styled.div`
   height: 50px;
   max-height: 50px;
   white-space: nowrap;
-  color: ${(props) => props.theme.textColor.highlight};
+  color: ${(props) => props.theme.textColor.hover};
 `;
 export const OverView = styled.div`
   font-size: 20px;
   height: 100px;
   max-height: 100px;
+  color: ${(props) => props.theme.textColor.highlight};
 `;
 
 export const Category = styled.h1`
@@ -118,15 +114,18 @@ export const Row = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  padding: 20px;
+  border-radius: 16px;
   background-color: rgba(0,0,0, 1);
+  box-shadow: 0px 0px 8px 16px rgba(18,18,18, 0.6);
   div{
     padding: 20px;
     width: 400px;
   }
   h1 {
-    font-size: 32px;
+    font-size: 50px;
     font-weight: bolder;
-    margin-bottom: 16px;
+    margin-bottom: 30px;
   }
   h2 {
     font-size: 24px;

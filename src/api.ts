@@ -20,6 +20,7 @@ export interface IMedia {
   poster_path: string;
   release_date: string;
   title: string;
+  name: string;
   video: boolean;
   vote_average: number;
   vote_count: number;
@@ -51,6 +52,7 @@ export interface IMediaDetail {
   status: string;
   tagline: string;
   title: string;
+  name: string;
   video: boolean;
   vote_average: number;
   vote_coun: number;
@@ -60,27 +62,47 @@ export const imageURL = (path: string, format?: string) =>
   `https://image.tmdb.org/t/p/${format ? format : "original"}${path}`;
 
 export const fetchTrending = () => {
-  return fetch(`${basicURL}trending/all/week?api_key=${APIKey}`).then((res) =>
-    res.json()
-  );
+  return fetch(
+    `${basicURL}trending/all/week?api_key=${APIKey}&language=ko-KR`
+  ).then((res) => res.json());
 };
 
-export const fetchPopMovie = () => {
-  return fetch(`${basicURL}movie/popular?api_key=${APIKey}`).then((res) =>
-    res.json()
-  );
-};
-
-export const fetchSearching =({queryKey}:any)=>{
+export const fetchSearching = ({ queryKey }: any) => {
   const [, query] = queryKey;
-  return fetch(`${basicURL}search/multi?api_key=${APIKey}&query=${query}`).then((res) =>
-  res.json()
-);
-}
-
-export const fetchMovieDetail = ({queryKey}:any) => {
-  const [, query , mediaType="movie"] = queryKey;
-  return fetch(`${basicURL}${mediaType}/${query}?api_key=${APIKey}`).then((res) =>
-    res.json()
-  );
+  return fetch(
+    `${basicURL}search/multi?api_key=${APIKey}&query=${query}&language=ko-KR`
+  ).then((res) => res.json());
 };
+
+export const fetchMediaDetail = ({ queryKey }: any) => {
+  const [, query, mediaType = "movie"] = queryKey;
+  return fetch(
+    `${basicURL}${mediaType}/${query}?api_key=${APIKey}&language=ko-KR`
+  ).then((res) => res.json());
+};
+
+export const movieFetches = {
+  fetchMovieUpcoming: () => {
+    return fetch(
+      `${basicURL}movie/upcoming?api_key=${APIKey}&language=ko-KR`
+    ).then((res) => res.json());
+  },
+  fetchPopMovie: () => {
+    return fetch(
+      `${basicURL}movie/popular?api_key=${APIKey}&language=ko-KR`
+    ).then((res) => res.json());
+  },
+};
+
+export const tvFetches = {
+  fetchTvTopRate: () => {
+    return fetch(
+      `${basicURL}tv/top_rated?api_key=${APIKey}&language=ko-KR`
+    ).then((res) => res.json());
+  },
+  fetchPopTv: () => {
+    return fetch(
+      `${basicURL}tv/popular?api_key=${APIKey}&language=ko-KR`
+    ).then((res) => res.json());
+  },
+}
