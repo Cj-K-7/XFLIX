@@ -1,4 +1,4 @@
-const APIKey = "4161cf6d910bb2a80ad0681aa12722e";
+const APIKey = process.env.REACT_APP_MOVIEAPI_KEY;
 const basicURL = "https://api.themoviedb.org/3/";
 
 export interface IResult {
